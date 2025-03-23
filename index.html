@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DesignPulseStudio | TikTok Influencer Landing Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="https://picsum.photos/32/32?random=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    <!-- Add EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        :root {
+            --primary: #fe2c55;
+            --secondary: #25f4ee;
+            --text-light: #f5f5f7;
+            --text-dark: #1d1d1f;
+            --bg-light: #ffffff;
+            --bg-dark: #121212;
+            --card-light: #f5f5f7;
+            --card-dark: #1e1e1e;
+            --nav-light: rgba(255, 255, 255, 0.8);
+            --nav-dark: rgba(18, 18, 18, 0.8);
+            --shadow-light: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-dark: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        body.dark-mode {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px 0;
+            background-color: var(--nav-light);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        body.dark-mode header {
+            background-color: var(--nav-dark);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        body.dark-mode .nav-links a {
+            color: var(--text-light);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: var(--text-dark);
+            background-color: var(--card-light);
+        }
+
+        body.dark-mode .theme-toggle {
+            color: var(--text-light);
+            background-color: var(--card-dark);
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
+
+        body.dark-mode .mobile-toggle {
+            color: var(--text-light);
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            flex: 1;
+            padding-right: 50px;
+        }
+
+        .hero-img {
+            flex: 1;
+            position: relative;
+        }
+
+        .hero-img img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px;
+            object-fit: cover;
+            box-shadow: var(--shadow-light);
+        }
+
+        body.dark-mode .hero-img img {
+            box-shadow: var(--shadow-dark);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .cta-btns {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            box-shadow: 0 10px 20px rgba(254, 44, 85, 0.3);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 15px 25px rgba(254, 44, 85, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-dark);
+            border: 2px solid var(--text-dark);
+        }
+
+        body.dark-mode .btn-secondary {
+            color: var(--text-light);
+            border: 2px solid var(--text-light);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--card-light);
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        body.dark-mode .social-icon {
+            background-color: var(--card-dark);
+            color: var(--text-light);
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px);
+        }
+
+        .stats {
+            padding: 100px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .stat-card {
+            background-color: var(--card-light);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--shadow-light);
+            transform: translateY(30px);
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 0.8s ease; /* Fallback transition */
+        }
+
+        /* Fallback: Make cards visible after 3 seconds if JS fails */
+        .stat-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        body.dark-mode .stat-card {
+            background-color: var(--card-dark);
+            box-shadow: var(--shadow-dark);
+        }
+
+        .stat-card h3 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-card p {
+            font-size: 1rem;
+            opacity: 0.7;
+        }
+
+        .content {
+            padding: 100px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 span {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.7;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .content-card {
+            border-radius: 20px;
+            overflow: hidden;
+            background-color: var(--card-light);
+            box-shadow: var(--shadow-light);
+            transform: translateY(30px);
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 0.8s ease; /* Fallback transition */
+        }
+
+        /* Fallback: Make content cards visible after 3 seconds if JS fails */
+        .content-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        body.dark-mode .content-card {
+            background-color: var(--card-dark);
+            box-shadow: var(--shadow-dark);
+        }
+
+        .content-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        /* Fallback for images that fail to load */
+        .content-card img[onerror] {
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .content-card-body {
+            padding: 20px;
+        }
+
+        .content-card-body h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .content-card-body p {
+            opacity: 0.7;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .content-card-footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px 20px;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .collaborations {
+            padding: 100px 0;
+            background-color: var(--card-light);
+            position: relative;
+        }
+
+        body.dark-mode .collaborations {
+            background-color: var(--card-dark);
+        }
+
+        .collab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 50px;
+            align-items: center;
+            justify-items: center;
+        }
+
+        .collab-item {
+            max-width: 200px;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            position: relative;
+            transform: scale(0.8);
+        }
+
+        /* Fallback: Make collab items visible after 3 seconds if JS fails */
+        .collab-item.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .collab-item:hover {
+            opacity: 1;
+            transform: scale(1.1);
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
+        }
+
+        body.dark-mode .collab-item:hover {
+            filter: drop-shadow(0 10px 20px rgba(255, 255, 255, 0.2));
+        }
+
+        /* Ensure collab images fit properly */
+        .collab-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Fallback for collab images that fail to load */
+        .collab-item img[onerror] {
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .contact {
+            padding: 100px 0;
+        }
+
+        .contact-container {
+            display: flex;
+            gap: 50px;
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-info h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .contact-info h2 span {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .contact-info p {
+            margin-bottom: 30px;
+            line-height: 1.6;
+            opacity: 0.8;
+        }
+
+        .contact-info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .contact-info-item i {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--card-light);
+            color: var(--text-dark);
+        }
+
+        body.dark-mode .contact-info-item i {
+            background-color: var(--card-dark);
+            color: var(--text-light);
+        }
+
+        .contact-form {
+            flex: 1;
+            background-color: var(--card-light);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-light);
+        }
+
+        body.dark-mode .contact-form {
+            background-color: var(--card-dark);
+            box-shadow: var(--shadow-dark);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            font-family: var(--font-main);
+        }
+
+        body.dark-mode .form-control {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        footer {
+            padding: 50px 0 30px;
+            background-color: var(--card-light);
+            text-align: center;
+        }
+
+        body.dark-mode footer {
+            background-color: var(--card-dark);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .footer-logo span {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        body.dark-mode .footer-links a {
+            color: var(--text-light);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 15px;
+        }
+
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        body.dark-mode .footer-social a {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+        }
+
+        .footer-social a:hover {
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        body.dark-mode .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(254, 44, 85, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 99;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(254, 44, 85, 0.4);
+        }
+        
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .shape {
+            position: absolute;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+        
+        @media (max-width: 991px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hero-content {
+                padding-right: 0;
+                margin-bottom: 50px;
+            }
+            
+            .cta-btns {
+                justify-content: center;
+            }
+            
+            .social-icons {
+                justify-content: center;
+            }
+            
+            .contact-container {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                gap: 0;
+                background-color: var(--bg-light);
+                box-shadow: var(--shadow-light);
+                height: 0;
+                overflow: hidden;
+                transition: height 0.3s;
+            }
+            
+            body.dark-mode .nav-links {
+                background-color: var(--bg-dark);
+                box-shadow: var(--shadow-dark);
+            }
+            
+            .nav-links.active {
+                height: 200px;
+            }
+            
+            .nav-links a {
+                padding: 15px 20px;
+                width: 100%;
+                text-align: center;
+            }
+            
+            .mobile-toggle {
+                display: block;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <img src="/images/logo (2).png" alt="DesignPulseStudio Logo" style="height: 50px;"> <span></span>
+                </div>
+                <div class="nav-links">
+                    <a href="#home" class="active">Home</a>
+                    <a href="#content">Content</a>
+                    <a href="#collaborations">Collabs</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="nav-actions">
+                    <button class="theme-toggle" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="mobile-toggle" id="mobile-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="floating-shapes"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1>A <span>TikTok</span> Influencer Page by DesignPulseStudio</h1>
+                <p>We crafted this sleek landing page for a TikTok creator with 5M+ followers, showcasing their viral content and brand collabs with a modern, Gen Z vibe.</p>
+                <div class="cta-btns">
+                    <a href="#contact" class="btn btn-primary">
+                        <i class="fas fa-envelope"></i> Get Your Own Page
+                    </a>
+                    <a href="#content" class="btn btn-secondary">
+                        <i class="fas fa-play"></i> See the Design
+                    </a>
+                </div>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="hero-img">
+                <img src="images/hero.jpg" alt="Influencer Profile" onerror="this.onerror=null; this.src='https://via.placeholder.com/500?text=Influencer+Profile';">
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>5M+</h3>
+                    <p>TikTok Followers</p>
+                </div>
+                <div class="stat-card">
+                    <h3>1B+</h3>
+                    <p>Total Views</p>
+                </div>
+                <div class="stat-card">
+                    <h3>25%</h3>
+                    <p>Avg. Engagement Rate</p>
+                </div>
+                <div class="stat-card">
+                    <h3>100+</h3>
+                    <p>Brand Collaborations</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content" id="content">
+        <div class="container">
+            <div class="section-header">
+                <h2>Showcasing <span>Content</span></h2>
+                <p>We designed this section to highlight the influencer’s most viral TikTok content, engaging their Gen Z audience with a clean, modern layout.</p>
+            </div>
+            <div class="content-grid">
+                <div class="content-card">
+                    <img src="images/image2.jpg?t=<%= new Date().getTime() %>" alt="Content Thumbnail" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x250?text=Content+Thumbnail';">
+                    <div class="content-card-body">
+                        <h3>Daily Life Hacks</h3>
+                        <p>Simple but effective hacks to make your daily life easier and more efficient.</p>
+                    </div>
+                    <div class="content-card-footer">
+                        <span><i class="fas fa-heart"></i> 2.4M</span>
+                        <span><i class="fas fa-comment"></i> 32K</span>
+                        <span><i class="fas fa-share"></i> 105K</span>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <img src="images/image6.jpg?t=<%= new Date().getTime() %>" alt="Content Thumbnail" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x250?text=Content+Thumbnail';">
+                    <div class="content-card-body">
+                        <h3>Style Transformation</h3>
+                        <p>Watch as I transform different styles and aesthetics with quick outfit changes.</p>
+                    </div>
+                    <div class="content-card-footer">
+                        <span><i class="fas fa-heart"></i> 3.1M</span>
+                        <span><i class="fas fa-comment"></i> 45K</span>
+                        <span><i class="fas fa-share"></i> 210K</span>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <img src="images/image3.jpg?t=<%= new Date().getTime() %>" alt="Content Thumbnail" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x250?text=Content+Thumbnail';">
+                    <div class="content-card-body">
+                        <h3>Comedy Skits</h3>
+                        <p>Relatable comedy sketches about school, relationships, and everyday situations.</p>
+                    </div>
+                    <div class="content-card-footer">
+                        <span><i class="fas fa-heart"></i> 5.7M</span>
+                        <span><i class="fas fa-comment"></i> 89K</span>
+                        <span><i class="fas fa-share"></i> 310K</span>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <img src="images/image4.jpg?t=<%= new Date().getTime() %>" alt="Content Thumbnail" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x250?text=Content+Thumbnail';">
+                    <div class="content-card-body">
+                        <h3>Product Reviews</h3>
+                        <p>Honest reviews of trending products to help you make better purchasing decisions.</p>
+                    </div>
+                    <div class="content-card-footer">
+                        <span><i class="fas fa-heart"></i> 1.8M</span>
+                        <span><i class="fas fa-comment"></i> 27K</span>
+                        <span><i class="fas fa-share"></i> 95K</span>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <img src="images/image6.jpg?t=<%= new Date().getTime() %>" alt="Content Thumbnail" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x250?text=Content+Thumbnail';">
+                    <div class="content-card-body">
+                        <h3>Dance Challenges</h3>
+                        <p>Latest viral dance challenges and tutorials to help you learn the moves.</p>
+                    </div>
+                    <div class="content-card-footer">
+                        <span><i class="fas fa-heart"></i> 4.2M</span>
+                        <span><i class="fas fa-comment"></i> 56K</span>
+                        <span><i class="fas fa-share"></i> 280K</span>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <img src="images/image5.jpg?t=<%= new Date().getTime() %>" alt="Content Thumbnail" onerror="this.onerror=null; this.src='https://via.placeholder.com/300x250?text=Content+Thumbnail';">
+                    <div class="content-card-body">
+                        <h3>Day In My Life</h3>
+                        <p>Follow me around to see what a typical day looks like as a content creator.</p>
+                    </div>
+                    <div class="content-card-footer">
+                        <span><i class="fas fa-heart"></i> 2.9M</span>
+                        <span><i class="fas fa-comment"></i> 38K</span>
+                        <span><i class="fas fa-share"></i> 120K</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="collaborations" id="collaborations">
+        <div class="container">
+            <div class="section-header">
+                <h2>Brand <span>Collaborations</span></h2>
+                <p>We built this section to showcase the influencer’s partnerships, creating a clean layout for brand logos to shine.</p>
+            </div>
+            <div class="collab-grid">
+                <div class="collab-item">
+                    <img src="images/joseph-barrientos-4qSb_FWhHKs-unsplash.jpg?t=<%= new Date().getTime() %>" alt="Brand Logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/150?text=Brand+Logo';">
+                </div>
+                <div class="collab-item">
+                    <img src="images/mae-mu-z8PEoNIlGlg-unsplash.jpg?t=<%= new Date().getTime() %>" alt="Brand Logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/150?text=Brand+Logo';">
+                </div>
+                <div class="collab-item">
+                    <img src="images/marcel-strauss-kOzjvV0Wy8E-unsplash.jpg?t=<%= new Date().getTime() %>" alt="Brand Logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/150?text=Brand+Logo';">
+                </div>
+                <div class="collab-item">
+                    <img src="images/christian-wiediger-8d8KfpYCQV0-unsplash.jpg?t=<%= new Date().getTime() %>" alt="Brand Logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/150?text=Brand+Logo';">
+                </div>
+                <div class="collab-item">
+                    <img src="images/cedric-streit-H7qMwOxf6Z8-unsplash.jpg?t=<%= new Date().getTime() %>" alt="Brand Logo" onerror="this.onerror=null; this.src='https://via.placeholder.com/150?text=Brand+Logo';">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h2>Let's <span>Work Together</span></h2>
+                    <p>Want a landing page like this for your brand? Contact DesignPulseStudio to bring your vision to life with modern, engaging designs.</p>
+                    <div class="contact-info-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>contact@designpulsestudio.com</span>
+                    </div>
+                    <div class="contact-info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Hartford, CT</span>
+                    </div>
+                    <div class="contact-info-item">
+                        <i class="fas fa-globe"></i>
+                        <span>designpulsestudio.com</span>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="contact-form">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" class="form-control" placeholder="Your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" class="form-control" placeholder="Subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" class="form-control" placeholder="Your message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="/images/logo (2).png" alt="DesignPulseStudio Logo" style="height: 32px;"> <span></span>
+                </div>
+                <div class="footer-links">
+                    <a href="#home">Home</a>
+                    <a href="#content">Content</a>
+                    <a href="#collaborations">Collabs</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-tiktok"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2025 DesignPulseStudio. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <div class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script>
+        // Initialize EmailJS with your User ID
+        (function() {
+            emailjs.init("tCbIgYuoG2E3RcDwT"); // VITE_EMAILJS_USER_ID
+        })();
+
+        // Handle form submission
+        document.getElementById('contact-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Get form data
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value
+            };
+
+            // Send email using EmailJS
+            emailjs.send('service_sllb5ap', 'template_iotur0d', formData)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    alert('Message sent successfully!');
+                    document.getElementById('contact-form').reset(); // Reset the form
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    alert('Failed to send message. Please try again later.');
+                });
+        });
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const icon = themeToggle.querySelector('i');
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
+        });
+
+        // Mobile Menu Toggle
+        const mobileToggle = document.getElementById('mobile-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        mobileToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = mobileToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero Section Animation
+        gsap.from('.hero-content', {
+            opacity: 0,
+            y: 50,
+            duration: 1,
+            ease: 'power3.out'
+        });
+
+        // Hero Image Slide-In Animation (from the right)
+        gsap.from('.hero-img img', {
+            opacity: 0,
+            x: 100,
+            duration: 1,
+            delay: 0.3,
+            ease: 'power3.out'
+        });
+
+        // Stats Cards Animation
+        gsap.utils.toArray('.stat-card').forEach(card => {
+            gsap.to(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top 80%',
+                    toggleActions: 'play none none none'
+                },
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: 'power3.out',
+                onComplete: () => {
+                    card.classList.add('visible');
+                }
+            });
+
+            // Fallback: Add 'visible' class after 3 seconds if animation doesn't trigger
+            setTimeout(() => {
+                card.classList.add('visible');
+            }, 3000);
+        });
+
+        // Content Cards Animation
+        gsap.utils.toArray('.content-card').forEach(card => {
+            gsap.to(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top 80%',
+                    toggleActions: 'play none none none'
+                },
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: 'power3.out',
+                onComplete: () => {
+                    card.classList.add('visible');
+                }
+            });
+
+            // Fallback: Add 'visible' class after 3 seconds if animation doesn't trigger
+            setTimeout(() => {
+                card.classList.add('visible');
+            }, 3000);
+        });
+
+        // Collaborations Animation (Updated)
+        gsap.utils.toArray('.collab-item').forEach((item, index) => {
+            gsap.fromTo(item, 
+                {
+                    opacity: 0,
+                    scale: 0.8,
+                    rotation: -30,
+                    y: 100
+                },
+                {
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 80%',
+                        toggleActions: 'play none none none'
+                    },
+                    opacity: 1,
+                    scale: 1,
+                    rotation: 0,
+                    y: 0,
+                    duration: 1.2,
+                    ease: 'elastic.out(1, 0.5)',
+                    delay: index * 0.2, // Staggered effect
+                    onComplete: () => {
+                        item.classList.add('visible');
+                    }
+                }
+            );
+
+            // Fallback: Add 'visible' class after 3 seconds if animation doesn't trigger
+            setTimeout(() => {
+                item.classList.add('visible');
+            }, 3000);
+        });
+
+        // Floating Shapes Animation
+        const shapesContainer = document.querySelector('.floating-shapes');
+        for (let i = 0; i < 5; i++) {
+            const shape = document.createElement('div');
+            shape.classList.add('shape');
+            const size = Math.random() * 100 + 50;
+            shape.style.width = `${size}px`;
+            shape.style.height = `${size}px`;
+            shape.style.left = `${Math.random() * 100}%`;
+            shape.style.top = `${Math.random() * 100}%`;
+            shapesContainer.appendChild(shape);
+
+            gsap.to(shape, {
+                x: Math.random() * 200 - 100,
+                y: Math.random() * 200 - 100,
+                rotation: 360,
+                duration: 10 + Math.random() * 10,
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut'
+            });
+        }
+
+        // Back to Top Button
+        const backToTop = document.querySelector('.back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
