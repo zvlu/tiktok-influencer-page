@@ -8,7 +8,6 @@
     <link rel="icon" type="image/x-icon" href="https://picsum.photos/32/32?random=1">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
-    <!-- Add EmailJS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         :root {
@@ -295,10 +294,9 @@
             box-shadow: var(--shadow-light);
             transform: translateY(30px);
             opacity: 0;
-            transition: opacity 0.8s ease, transform 0.8s ease; /* Fallback transition */
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
-        /* Fallback: Make cards visible after 3 seconds if JS fails */
         .stat-card.visible {
             opacity: 1;
             transform: translateY(0);
@@ -362,10 +360,9 @@
             box-shadow: var(--shadow-light);
             transform: translateY(30px);
             opacity: 0;
-            transition: opacity 0.8s ease, transform 0.8s ease; /* Fallback transition */
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
-        /* Fallback: Make content cards visible after 3 seconds if JS fails */
         .content-card.visible {
             opacity: 1;
             transform: translateY(0);
@@ -382,7 +379,6 @@
             object-fit: cover;
         }
 
-        /* Fallback for images that fail to load */
         .content-card img[onerror] {
             background-color: #f0f0f0;
             display: flex;
@@ -442,7 +438,6 @@
             transform: scale(0.8);
         }
 
-        /* Fallback: Make collab items visible after 3 seconds if JS fails */
         .collab-item.visible {
             opacity: 1;
             transform: scale(1);
@@ -458,7 +453,6 @@
             filter: drop-shadow(0 10px 20px rgba(255, 255, 255, 0.2));
         }
 
-        /* Ensure collab images fit properly */
         .collab-item img {
             width: 100%;
             height: 150px;
@@ -466,7 +460,6 @@
             display: block;
         }
 
-        /* Fallback for collab images that fail to load */
         .collab-item img[onerror] {
             background-color: #f0f0f0;
             display: flex;
@@ -683,7 +676,7 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(254, 44, 85, 0.4);
         }
-        
+
         .floating-shapes {
             position: absolute;
             top: 0;
@@ -693,38 +686,38 @@
             overflow: hidden;
             z-index: -1;
         }
-        
+
         .shape {
             position: absolute;
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             border-radius: 50%;
             opacity: 0.5;
         }
-        
+
         @media (max-width: 991px) {
             .hero {
                 flex-direction: column;
                 text-align: center;
             }
-            
+
             .hero-content {
                 padding-right: 0;
                 margin-bottom: 50px;
             }
-            
+
             .cta-btns {
                 justify-content: center;
             }
-            
+
             .social-icons {
                 justify-content: center;
             }
-            
+
             .contact-container {
                 flex-direction: column;
             }
         }
-        
+
         @media (max-width: 768px) {
             .nav-links {
                 position: fixed;
@@ -739,26 +732,26 @@
                 overflow: hidden;
                 transition: height 0.3s;
             }
-            
+
             body.dark-mode .nav-links {
                 background-color: var(--bg-dark);
                 box-shadow: var(--shadow-dark);
             }
-            
+
             .nav-links.active {
                 height: 200px;
             }
-            
+
             .nav-links a {
                 padding: 15px 20px;
                 width: 100%;
                 text-align: center;
             }
-            
+
             .mobile-toggle {
                 display: block;
             }
-            
+
             .footer-content {
                 flex-direction: column;
                 gap: 20px;
@@ -1041,9 +1034,8 @@
 
         // Handle form submission
         document.getElementById('contact-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
+            event.preventDefault();
 
-            // Get form data
             const formData = {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
@@ -1051,12 +1043,11 @@
                 message: document.getElementById('message').value
             };
 
-            // Send email using EmailJS
             emailjs.send('service_sllb5ap', 'template_iotur0d', formData)
                 .then(function(response) {
                     console.log('SUCCESS!', response.status, response.text);
                     alert('Message sent successfully!');
-                    document.getElementById('contact-form').reset(); // Reset the form
+                    document.getElementById('contact-form').reset();
                 }, function(error) {
                     console.log('FAILED...', error);
                     alert('Failed to send message. Please try again later.');
@@ -1085,7 +1076,6 @@
         // GSAP Animations
         gsap.registerPlugin(ScrollTrigger);
 
-        // Hero Section Animation
         gsap.from('.hero-content', {
             opacity: 0,
             y: 50,
@@ -1093,7 +1083,6 @@
             ease: 'power3.out'
         });
 
-        // Hero Image Slide-In Animation (from the right)
         gsap.from('.hero-img img', {
             opacity: 0,
             x: 100,
@@ -1102,7 +1091,6 @@
             ease: 'power3.out'
         });
 
-        // Stats Cards Animation
         gsap.utils.toArray('.stat-card').forEach(card => {
             gsap.to(card, {
                 scrollTrigger: {
@@ -1119,13 +1107,11 @@
                 }
             });
 
-            // Fallback: Add 'visible' class after 3 seconds if animation doesn't trigger
             setTimeout(() => {
                 card.classList.add('visible');
             }, 3000);
         });
 
-        // Content Cards Animation
         gsap.utils.toArray('.content-card').forEach(card => {
             gsap.to(card, {
                 scrollTrigger: {
@@ -1142,13 +1128,11 @@
                 }
             });
 
-            // Fallback: Add 'visible' class after 3 seconds if animation doesn't trigger
             setTimeout(() => {
                 card.classList.add('visible');
             }, 3000);
         });
 
-        // Collaborations Animation (Updated)
         gsap.utils.toArray('.collab-item').forEach((item, index) => {
             gsap.fromTo(item, 
                 {
@@ -1169,20 +1153,18 @@
                     y: 0,
                     duration: 1.2,
                     ease: 'elastic.out(1, 0.5)',
-                    delay: index * 0.2, // Staggered effect
+                    delay: index * 0.2,
                     onComplete: () => {
                         item.classList.add('visible');
                     }
                 }
             );
 
-            // Fallback: Add 'visible' class after 3 seconds if animation doesn't trigger
             setTimeout(() => {
                 item.classList.add('visible');
             }, 3000);
         });
 
-        // Floating Shapes Animation
         const shapesContainer = document.querySelector('.floating-shapes');
         for (let i = 0; i < 5; i++) {
             const shape = document.createElement('div');
@@ -1205,7 +1187,6 @@
             });
         }
 
-        // Back to Top Button
         const backToTop = document.querySelector('.back-to-top');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 300) {
